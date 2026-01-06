@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Zap, Users, Award } from 'lucide-react';
+import solomonImg from '../assets/team/solomon.png';
+import olaImg from '../assets/team/ola.png';
 
 const About: React.FC = () => {
 
@@ -54,19 +56,33 @@ const About: React.FC = () => {
                 </div>
             </div>
 
-            {/* Team Placeholder */}
+            {/* Team */}
             <div className="container mx-auto px-6 py-32">
                 <h2 className="text-4xl font-bold mb-16">The Team</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {[1, 2, 3].map((i) => (
-                        <div key={i} className="group">
-                            <div className="aspect-[3/4] bg-surface rounded-xl mb-6 overflow-hidden relative">
-                                <div className="absolute inset-0 bg-gray-800 animate-pulse" />
-                            </div>
-                            <h3 className="text-xl font-bold">Team Member {i}</h3>
-                            <p className="text-text-muted">Lead Engineer</p>
+                    <div className="group">
+                        <div className="aspect-[3/4] bg-surface rounded-xl mb-6 overflow-hidden relative">
+                            <img
+                                src={solomonImg}
+                                alt="Solomon"
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
                         </div>
-                    ))}
+                        <h3 className="text-xl font-bold">Solomon</h3>
+                        <p className="text-text-muted">Lead Engineer</p>
+                    </div>
+
+                    <div className="group">
+                        <div className="aspect-[3/4] bg-surface rounded-xl mb-6 overflow-hidden relative">
+                            <img
+                                src={olaImg}
+                                alt="Ola"
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
+                        </div>
+                        <h3 className="text-xl font-bold">Ola</h3>
+                        <p className="text-text-muted">Creative Director</p>
+                    </div>
                 </div>
             </div>
         </div>
