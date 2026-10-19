@@ -1,0 +1,6 @@
+# robots.txt for https://www.onedigitaloffice.com
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://www.onedigitaloffice.com/sitemap.xml

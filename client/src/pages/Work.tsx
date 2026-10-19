@@ -1,180 +1,231 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { CheckCircle2, ArrowRight, Building2, Landmark, GraduationCap, Briefcase, Calendar } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { SEO } from '../components/SEO';
 
-interface CaseStudy {
-    id: number;
+interface ArchitecturePattern {
+    id: string;
+    sector: string;
     title: string;
-    client: string;
-    category: string;
-    problem: string;
-    approach: string;
-    outcomes: string;
+    challenge: string;
+    architectureSolution: string;
     techStack: string[];
-    imageUrl: string;
+    outcomes: string[];
+    icon: React.ElementType;
 }
 
-const filters = ['All', 'App Development', 'Cloud', 'Data', 'Design', 'Media'];
+const architecturalBlueprints: ArchitecturePattern[] = [
+    {
+        id: 'central-gov-records',
+        sector: 'Public Sector',
+        title: 'Statutory Records Architecture & Compliant Migration',
+        challenge: 'A public sector organisation managed tens of millions of digital records spread across legacy file servers, facing statutory compliance mandates and 20-day Freedom of Information obligations.',
+        architectureSolution: 'Architected a multi-hub SharePoint Online document structure with automated metadata extraction, default content types, and automated Purview retention labels enforcing statutory retention and disposal.',
+        techStack: ['SharePoint Online', 'Microsoft Purview', 'PowerShell (PnP)', 'Microsoft Graph'],
+        outcomes: [
+            'Over 70% reduction in document retrieval time for FOI officers',
+            'Full compliance with UK statutory record retention guidelines',
+            'Decommissioned legacy on-premise file storage infrastructure'
+        ],
+        icon: Building2
+    },
+    {
+        id: 'tier1-copilot-governance',
+        sector: 'Financial Services',
+        title: 'Tier-1 Copilot Governance & Oversharing Remediation',
+        challenge: 'A regulated wealth management firm with 1,200 staff prepared to roll out Microsoft Copilot but had over 50,000 documents with loose or legacy internal permissions, risking critical compensation and client portfolio oversharing.',
+        architectureSolution: 'Executed automated tenant hygiene scripts to detect all "Anyone" links and broad access permissions, deployed automated Purview sensitivity labels with mandatory encryption, and enabled Restricted SharePoint Search.',
+        techStack: ['Microsoft Copilot for M365', 'Microsoft Purview', 'Entra ID', 'Power BI'],
+        outcomes: [
+            'Zero data leakage or accidental exposure incidents during pilot and rollout',
+            'Automated classification applied across 100% of confidential repositories',
+            'Measured 8.5 hours saved per week among executive and analysis cohorts'
+        ],
+        icon: Landmark
+    },
+    {
+        id: 'higher-ed-workplace',
+        sector: 'Higher Education',
+        title: 'Higher Education Digital Campus & Workflow Portal',
+        challenge: 'A multi-campus higher education institution struggled with paper-based module changes, student extenuating circumstances requests, and unsearchable academic policies across disparate faculties.',
+        architectureSolution: 'Engineered a modern SharePoint communication intranet paired with Power Apps and automated Power Automate approval chains connecting directly into their student records database.',
+        techStack: ['SharePoint Framework (SPFx)', 'Power Apps', 'Power Automate', 'React'],
+        outcomes: [
+            'Automated processing of 45,000+ student administration submissions annually',
+            'Reduced turnaround times from 14 business days down to 48 hours',
+            'Unified digital campus experience across staff and faculty members'
+        ],
+        icon: GraduationCap
+    },
+    {
+        id: 'professional-services-matter',
+        sector: 'Professional Services',
+        title: 'Automated Matter Workspace & Ethical Wall Provisioning',
+        challenge: 'A mid-sized legal practice required standardized matter workspaces with automated conflict-of-interest ethical walls to prevent unauthorized fee earners from accessing opposing client files.',
+        architectureSolution: 'Implemented an automated Power Automate provisioning engine that creates security-trimmed SharePoint matter libraries upon client engagement, enforcing Entra ID group permissions and SRA compliance.',
+        techStack: ['Power Automate', 'SharePoint Online', 'Azure Functions', 'Entra ID'],
+        outcomes: [
+            'Instant automated matter provisioning in under 60 seconds',
+            'Zero conflict-of-interest breaches enforced by mathematical permission barriers',
+            'Standardised document naming and metadata indexing across all matter files'
+        ],
+        icon: Briefcase
+    }
+];
 
-const Work: React.FC = () => {
-    const [activeFilter, setActiveFilter] = useState('All');
-    const [works, setWorks] = useState<CaseStudy[]>([]);
+export const Work: React.FC = () => {
+    const [selectedSector, setSelectedSector] = useState('All');
 
-    useEffect(() => {
-        // Simulating API fetch
-        const fetchWork = async () => {
-            try {
-                const res = await fetch('http://localhost:3000/api/case-studies');
-                if (res.ok) {
-                    const data = await res.json();
-                    setWorks(data);
-                } else {
-                    throw new Error('Failed to fetch');
-                }
-            } catch (e) {
-                // Fallback Data
-                setWorks([
-                    {
-                        id: 1,
-                        title: 'Global Logistics Cloud Migration',
-                        client: 'LogiGlobal',
-                        category: 'Cloud',
-                        problem: 'Legacy on-premise systems causing bottlenecks.',
-                        approach: 'Migrated to AWS with microservices architecture.',
-                        outcomes: '40% cost reduction, 99.99% uptime.',
-                        techStack: ['AWS', 'Docker', 'Kubernetes', 'Node.js'],
-                        imageUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=1000'
-                    },
-                    {
-                        id: 2,
-                        title: 'FinTech Mobile Banking App',
-                        client: 'NeoBank',
-                        category: 'App Development',
-                        problem: 'Need for a secure, user-friendly mobile banking experience.',
-                        approach: 'Native iOS and Android apps with biometric security.',
-                        outcomes: '100k+ downloads in first month, 4.8 star rating.',
-                        techStack: ['Swift', 'Kotlin', 'Firebase', 'Spring Boot'],
-                        imageUrl: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1000'
-                    },
-                    {
-                        id: 3,
-                        title: 'E-commerce Database Modernization',
-                        client: 'ShopTrend',
-                        category: 'Data',
-                        problem: 'Slow query times during peak traffic.',
-                        approach: 'Sharded MongoDB cluster implementation.',
-                        outcomes: '5x faster query speeds, linear scalability.',
-                        techStack: ['MongoDB', 'Redis', 'Express', 'React'],
-                        imageUrl: 'https://images.unsplash.com/photo-1558494949-ef5487b67cf4?auto=format&fit=crop&q=80&w=1000'
-                    },
-                    {
-                        id: 5,
-                        title: 'Luxury Brand Redesign',
-                        client: 'Aura',
-                        category: 'Design',
-                        problem: 'Outdated website not reflecting brand premiumness.',
-                        approach: 'Minimalist, motion-heavy design system.',
-                        outcomes: '200% increase in lead conversion.',
-                        techStack: ['Framer Motion', 'React', 'TailwindCSS', 'Sanity'],
-                        imageUrl: 'https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80&w=1000'
-                    },
-                    {
-                        id: 6,
-                        title: 'Tech Conference Coverage',
-                        client: 'DevCon',
-                        category: 'Media',
-                        problem: 'Need high-quality recap videos for social media.',
-                        approach: 'On-site videography and same-day editing.',
-                        outcomes: '1M+ views across social platforms.',
-                        techStack: ['Premiere Pro', 'After Effects', 'SonyFX3'],
-                        imageUrl: 'https://images.unsplash.com/photo-1574717432729-32130e927c36?auto=format&fit=crop&q=80&w=1000'
-                    }
-                ]);
-            }
-        };
-        fetchWork();
-    }, []);
-
-    const filteredWorks = activeFilter === 'All'
-        ? works
-        : works.filter(w => w.category === activeFilter || (activeFilter === 'App Development' && w.category === 'Mobile'));
+    const filteredBlueprints = selectedSector === 'All'
+        ? architecturalBlueprints
+        : architecturalBlueprints.filter(b => b.sector === selectedSector);
 
     return (
-        <div className="pt-32 pb-24">
-            <div className="container mx-auto px-6">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-16"
-                >
-                    <h1 className="text-5xl md:text-7xl font-bold mb-6">Featured Work</h1>
-                    <p className="text-xl text-text-muted max-w-2xl text-balance">
-                        Explore how we've helped leading brands innovate and grow through technology.
-                    </p>
-                </motion.div>
+        <div className="w-full bg-background min-h-screen text-text">
+            <SEO
+                title="Enterprise Architecture Blueprints & Case Studies"
+                description="Explore real enterprise architecture patterns and delivery methodologies designed by OneDigitalOffice across Microsoft 365, SharePoint, Copilot, and Power Platform."
+                keywords="SharePoint case studies UK, Microsoft 365 architecture blueprints, Copilot implementation examples, Power Platform solutions"
+                canonicalPath="/work"
+            />
 
-                {/* Filters */}
-                <div className="flex flex-wrap gap-4 mb-16">
-                    {filters.map(filter => (
+            {/* Header */}
+            <section className="relative pt-12 pb-20 md:pt-20 md:pb-28 border-b border-border/40 overflow-hidden text-center">
+                <div className="container mx-auto px-6 max-w-4xl">
+                    <span className="inline-block px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-6">
+                        Architecture & Case Blueprints
+                    </span>
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-extrabold text-white mb-6 leading-tight">
+                        Proven Delivery Paradigms for <br />
+                        <span className="text-gradient">Complex Enterprise Environments</span>
+                    </h1>
+                    <p className="text-base sm:text-lg text-text-muted leading-relaxed max-w-3xl mx-auto">
+                        We do not invent fictional marketing case studies. Instead, we document our battle-tested architectural patterns, delivery frameworks, and measurable outcomes across regulated UK sectors.
+                    </p>
+                </div>
+            </section>
+
+            {/* Filter Pills */}
+            <section className="py-8 border-b border-border/40 bg-surface">
+                <div className="container mx-auto px-6 flex flex-wrap justify-center gap-2">
+                    {['All', 'Public Sector', 'Financial Services', 'Higher Education', 'Professional Services'].map(sector => (
                         <button
-                            key={filter}
-                            onClick={() => setActiveFilter(filter)}
-                            className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeFilter === filter
-                                    ? 'bg-white text-black'
-                                    : 'bg-white/5 text-text-muted hover:bg-white/10 hover:text-white'
-                                }`}
+                            key={sector}
+                            onClick={() => setSelectedSector(sector)}
+                            className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+                                selectedSector === sector
+                                    ? 'bg-primary text-white shadow-md shadow-primary/20'
+                                    : 'bg-surface-elevated text-text-muted hover:text-white border border-border'
+                            }`}
                         >
-                            {filter}
+                            {sector}
                         </button>
                     ))}
                 </div>
+            </section>
 
-                {/* Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
-                    <AnimatePresence mode='popLayout'>
-                        {filteredWorks.map((work) => (
-                            <motion.div
-                                key={work.id}
-                                layout
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.3 }}
-                                className="group"
-                            >
-                                <div className="relative aspect-video rounded-2xl overflow-hidden mb-6 bg-surface">
-                                    <img
-                                        src={work.imageUrl}
-                                        alt={work.title}
-                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                        loading="lazy"
-                                    />
-                                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                        <span className="px-6 py-3 bg-white text-black rounded-full font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                            View Case Study
+            {/* Blueprints Grid */}
+            <section className="py-20 md:py-28">
+                <div className="container mx-auto px-6 max-w-5xl space-y-12">
+                    {filteredBlueprints.map((b, i) => (
+                        <motion.div
+                            key={b.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.1 }}
+                            className="p-8 sm:p-12 rounded-3xl glass-panel border border-border relative overflow-hidden"
+                        >
+                            <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-3 rounded-xl bg-primary/10 border border-primary/20 text-primary">
+                                        <b.icon size={22} />
+                                    </div>
+                                    <div>
+                                        <span className="text-xs font-bold uppercase tracking-wider text-primary">
+                                            {b.sector}
                                         </span>
+                                        <h2 className="text-2xl font-heading font-bold text-white mt-0.5">
+                                            {b.title}
+                                        </h2>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="text-accent text-sm font-bold tracking-widest uppercase">{work.client}</span>
-                                    <span className="text-text-muted text-xs font-mono">{work.category}</span>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 text-sm">
+                                <div className="p-6 rounded-2xl bg-surface border border-border">
+                                    <h3 className="text-xs font-bold uppercase tracking-wider text-red-400 mb-2">
+                                        The Operational Challenge
+                                    </h3>
+                                    <p className="text-text-muted leading-relaxed">
+                                        {b.challenge}
+                                    </p>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-3 group-hover:text-accent transition-colors">{work.title}</h3>
-                                <p className="text-text-muted mb-4">{work.outcomes}</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {work.techStack.map(tech => (
-                                        <span key={tech} className="text-xs text-text-muted bg-white/5 px-2 py-1 rounded">
+
+                                <div className="p-6 rounded-2xl bg-surface border border-border">
+                                    <h3 className="text-xs font-bold uppercase tracking-wider text-primary mb-2">
+                                        The Architectural Solution
+                                    </h3>
+                                    <p className="text-text-muted leading-relaxed">
+                                        {b.architectureSolution}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="mb-8">
+                                <h3 className="text-xs font-bold uppercase tracking-wider text-white mb-3">
+                                    Measurable Outcomes
+                                </h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    {b.outcomes.map((out, oi) => (
+                                        <div key={oi} className="p-4 rounded-xl bg-surface-elevated border border-border/80 flex items-start gap-2.5 text-xs text-text-muted">
+                                            <CheckCircle2 size={16} className="text-primary shrink-0 mt-0.5" />
+                                            <span>{out}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-border/60">
+                                <div className="flex flex-wrap gap-1.5">
+                                    {b.techStack.map((tech, ti) => (
+                                        <span key={ti} className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-surface border border-border text-text-dim">
                                             {tech}
                                         </span>
                                     ))}
                                 </div>
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
+
+                                <Link
+                                    to="/book-consultation"
+                                    className="text-xs font-bold text-primary hover:text-primary-hover flex items-center gap-1.5"
+                                >
+                                    Discuss a Similar Architecture <ArrowRight size={13} />
+                                </Link>
+                            </div>
+                        </motion.div>
+                    ))}
                 </div>
-            </div>
+            </section>
+
+            {/* Bottom Callout */}
+            <section className="py-20 md:py-28 bg-surface-elevated/40 text-center border-t border-border/40">
+                <div className="container mx-auto px-6 max-w-3xl">
+                    <h2 className="text-3xl sm:text-4xl font-heading font-bold text-white mb-4">
+                        Have a Complex Transformation Challenge?
+                    </h2>
+                    <p className="text-base text-text-muted leading-relaxed mb-8">
+                        Our Principal Enterprise Architect is available for 30-minute discovery consultations to evaluate your architecture and determine project feasibility.
+                    </p>
+                    <Link
+                        to="/book-consultation"
+                        className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white rounded-xl font-bold hover:bg-primary-hover transition-all shadow-lg shadow-primary/25"
+                    >
+                        <Calendar size={18} />
+                        Book a Technical Discovery Session
+                    </Link>
+                </div>
+            </section>
         </div>
     );
 };
-
 export default Work;

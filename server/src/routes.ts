@@ -6,95 +6,60 @@ export const router = Router();
 
 // Zod Schemas
 const leadSchema = z.object({
-    name: z.string().min(1),
-    email: z.string().email(),
-    phone: z.string().optional(),
-    company: z.string().optional(),
-    budget: z.string().optional(),
+    name: z.string().min(2, 'Full name is required'),
+    email: z.string().email('Valid business email is required'),
+    company: z.string().min(1, 'Company name is required'),
+    jobTitle: z.string().optional(),
+    companySize: z.string().optional(),
+    serviceInterest: z.union([z.array(z.string()), z.string()]).optional(),
     services: z.array(z.string()).optional(),
-    message: z.string().min(1),
+    budget: z.string().optional(),
+    message: z.string().min(5, 'Please provide brief details of your project or requirements'),
+    contactMethod: z.string().optional(),
+    phone: z.string().optional(),
+    consent: z.boolean().optional(),
+    botField: z.string().optional(), // Honeypot
 });
 
-// Seed Data
+// Seed Data - Enterprise Microsoft & AI Solutions
 const services = [
-    { id: 1, title: 'Application Development', description: 'Custom software tailored to your business needs.', icon: 'Code' },
-    { id: 2, title: 'Cloud App Development', description: 'Scalable cloud-native architectures.', icon: 'Cloud' },
-    { id: 3, title: 'Database Development', description: 'Robust data modeling and optimization.', icon: 'Database' },
-    { id: 4, title: 'Information Management', description: 'Organize and secure your enterprise data.', icon: 'FileText' },
-    { id: 5, title: 'Mobile App Development', description: 'Native and cross-platform mobile solutions.', icon: 'Smartphone' },
-    { id: 6, title: 'iOS & Android Dev', description: 'Dedicated development for Apple and Google ecosystems.', icon: 'Smartphone' },
-    { id: 7, title: 'Web Design', description: 'Visual storytelling and user-centric interfaces.', icon: 'Layout' },
-    { id: 8, title: 'Visual Design', description: 'Brand identity and graphic design assets.', icon: 'PenTool' },
-    { id: 9, title: 'Videography', description: 'Professional video production.', icon: 'Video' },
-    { id: 10, title: 'Video Editing', description: 'Post-production and motion graphics.', icon: 'Film' },
+    { id: 1, slug: 'microsoft-365', title: 'Microsoft 365 Transformation', description: 'Architect, modernise, and secure your cloud workplace with expert guidance.', icon: 'Layers' },
+    { id: 2, slug: 'sharepoint', title: 'SharePoint Online Solutions', description: 'High-performing enterprise intranets, document architecture, and SPFx customisation.', icon: 'FileText' },
+    { id: 3, slug: 'microsoft-copilot', title: 'Microsoft Copilot Implementation', description: 'Licensing, data hygiene, governance, and organizational adoption of Copilot.', icon: 'Bot' },
+    { id: 4, slug: 'ai-agents', title: 'AI Agents & Intelligent Automation', description: 'Deploy autonomous cognitive agents that automate multi-step operations.', icon: 'Cpu' },
+    { id: 5, slug: 'power-platform', title: 'Microsoft Power Platform', description: 'Low-code enterprise applications, workflow orchestration, and Power BI dashboards.', icon: 'Workflow' },
+    { id: 6, slug: 'enterprise-applications', title: 'Enterprise Application Engineering', description: 'Scalable .NET, React, TypeScript, and Azure cloud application architecture.', icon: 'Code' },
+    { id: 7, slug: 'ai-governance', title: 'AI Governance & Security', description: 'Information protection, tenant boundaries, risk mitigation, and compliance frameworks.', icon: 'ShieldCheck' },
+    { id: 8, slug: 'managed-services', title: 'Managed Microsoft 365 Services', description: 'Proactive tenant management, continuous optimisation, and senior engineering support.', icon: 'Zap' },
 ];
 
 const caseStudies = [
     {
         id: 1,
-        title: 'Global Logistics Cloud Migration',
-        client: 'LogiGlobal',
-        category: 'Cloud',
-        problem: 'Legacy on-premise systems causing bottlenecks.',
-        approach: 'Migrated to AWS with microservices architecture.',
-        outcomes: '40% cost reduction, 99.99% uptime.',
-        techStack: ['AWS', 'Docker', 'Kubernetes', 'Node.js'],
-        imageUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=1000'
+        title: 'Central Government Records Modernisation',
+        sector: 'Public Sector',
+        challenge: 'Tens of millions of legacy records in disparate silos requiring compliant migration.',
+        solution: 'SharePoint Online information architecture with automated classification and compliance labels.',
+        outcomes: '70% reduction in search time, full statutory retention compliance.',
+        techStack: ['SharePoint Online', 'Microsoft Graph', 'Azure Functions', 'PowerShell']
     },
     {
         id: 2,
-        title: 'FinTech Mobile Banking App',
-        client: 'NeoBank',
-        category: 'Mobile',
-        problem: 'Need for a secure, user-friendly mobile banking experience.',
-        approach: 'Native iOS and Android apps with biometric security.',
-        outcomes: '100k+ downloads in first month, 4.8 star rating.',
-        techStack: ['Swift', 'Kotlin', 'Firebase', 'Spring Boot'],
-        imageUrl: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1000'
+        title: 'Tier-1 Financial Services Copilot Governance',
+        sector: 'Financial Services',
+        challenge: 'Strict regulatory oversight requiring zero oversharing prior to Microsoft Copilot rollout.',
+        solution: 'Automated permission remediation, sensitivity labels, and tenant data hygiene policies.',
+        outcomes: 'Safe enterprise deployment for 2,500+ users with zero unauthorized access incidents.',
+        techStack: ['Microsoft Purview', 'Copilot for M365', 'Entra ID', 'Power BI']
     },
     {
         id: 3,
-        title: 'E-commerce Database Modernization',
-        client: 'ShopTrend',
-        category: 'Database',
-        problem: 'Slow query times during peak traffic.',
-        approach: 'Sharded MongoDB cluster implementation.',
-        outcomes: '5x faster query speeds, linear scalability.',
-        techStack: ['MongoDB', 'Redis', 'Express', 'React'],
-        imageUrl: 'https://images.unsplash.com/photo-1558494949-ef5487b67cf4?auto=format&fit=crop&q=80&w=1000'
-    },
-    {
-        id: 4,
-        title: 'Corporate Knowledge Portal',
-        client: 'InfoCorp',
-        category: 'Information Management',
-        problem: 'Siloed information across departments.',
-        approach: 'SharePoint-based intranet with AI search.',
-        outcomes: '30% increase in employee productivity.',
-        techStack: ['SharePoint', 'React', 'Azure', 'OpenAI'],
-        imageUrl: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=1000'
-    },
-    {
-        id: 5,
-        title: 'Luxury Brand Redesign',
-        client: 'Aura',
-        category: 'Web Design',
-        problem: 'Outdated website not reflecting brand premiumness.',
-        approach: 'Minimalist, motion-heavy design system.',
-        outcomes: '200% increase in lead conversion.',
-        techStack: ['Framer Motion', 'React', 'TailwindCSS', 'Sanity'],
-        imageUrl: 'https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80&w=1000'
-    },
-    {
-        id: 6,
-        title: 'Tech Conference Coverage',
-        client: 'DevCon',
-        category: 'Videography',
-        problem: 'Need high-quality recap videos for social media.',
-        approach: 'On-site videography and same-day editing.',
-        outcomes: '1M+ views across social platforms.',
-        techStack: ['Premiere Pro', 'After Effects', 'SonyFX3'],
-        imageUrl: 'https://images.unsplash.com/photo-1574717432729-32130e927c36?auto=format&fit=crop&q=80&w=1000'
+        title: 'Higher Education Digital Workplace & Portal',
+        sector: 'Education',
+        challenge: 'Disjointed faculty and student administrative workflows across multiple campuses.',
+        solution: 'Unified SharePoint modern intranet with Power Platform automated approval chains.',
+        outcomes: 'Processed 45,000+ administrative requests with 85% reduction in manual turnaround.',
+        techStack: ['SharePoint Framework (SPFx)', 'Power Apps', 'Power Automate', 'React']
     }
 ];
 
@@ -111,42 +76,60 @@ router.post('/lead', async (req: Request, res: Response) => {
     try {
         const data = leadSchema.parse(req.body);
 
-        // TODO: Save to Firestore
+        // Anti-spam honeypot check: if botField is filled, silently discard
+        if (data.botField && data.botField.trim() !== '') {
+            return res.status(200).json({ success: true, message: 'Consultation request received.' });
+        }
 
-        // Send Email (Mocked if no credentials)
+        // Send Email notification if SMTP configured
         if (process.env.SMTP_HOST) {
             const transporter = nodemailer.createTransport({
                 host: process.env.SMTP_HOST,
                 port: parseInt(process.env.SMTP_PORT || '587'),
-                secure: false, // true for 465, false for other ports
+                secure: process.env.SMTP_SECURE === 'true',
                 auth: {
                     user: process.env.SMTP_USER,
                     pass: process.env.SMTP_PASS,
                 },
             });
 
+            const interest = Array.isArray(data.serviceInterest) 
+                ? data.serviceInterest.join(', ') 
+                : (data.serviceInterest || data.services?.join(', ') || 'General Enquiry');
+
             await transporter.sendMail({
-                from: '"One Digital Office" <no-reply@onedigitaloffice.com>',
-                to: process.env.CONTACT_EMAIL || 'admin@onedigitaloffice.com', // Change to admin email
-                subject: `New Lead: ${data.name}`,
+                from: '"OneDigitalOffice Portal" <no-reply@onedigitaloffice.com>',
+                to: process.env.CONTACT_EMAIL || 'admin@onedigitaloffice.com',
+                subject: `New Consultation Enquiry: ${data.name} (${data.company})`,
                 text: `
-          Name: ${data.name}
-          Email: ${data.email}
-          Company: ${data.company}
-          Budget: ${data.budget}
-          Message: ${data.message}
-          Services: ${data?.services?.join(', ')}
-        `,
+Consultation Request Details:
+-----------------------------
+Full Name: ${data.name}
+Business Email: ${data.email}
+Company: ${data.company}
+Job Title: ${data.jobTitle || 'N/A'}
+Company Size: ${data.companySize || 'N/A'}
+Preferred Contact: ${data.contactMethod || 'Email'}
+Phone: ${data.phone || 'N/A'}
+Service Interest: ${interest}
+Estimated Budget: ${data.budget || 'Not specified'}
+
+Project Description:
+${data.message}
+                `,
             });
         }
 
-        res.status(200).json({ success: true, message: 'Inquiry received' });
+        return res.status(200).json({ 
+            success: true, 
+            message: 'Thank you. Your consultation request has been received. Our senior solution architect will review your brief and be in touch within 24 hours.' 
+        });
     } catch (error) {
         if (error instanceof z.ZodError) {
-            res.status(400).json({ success: false, errors: error.issues });
+            return res.status(400).json({ success: false, errors: error.issues });
         } else {
-            console.error(error);
-            res.status(500).json({ success: false, message: 'Server error' });
+            console.error('Lead submission error:', error);
+            return res.status(500).json({ success: false, message: 'An unexpected error occurred. Please contact us directly.' });
         }
     }
 });

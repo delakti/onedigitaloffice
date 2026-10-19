@@ -7,31 +7,63 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#050505', // Very dark, almost black
-        surface: '#121212',
-        primary: '#3B82F6', // Standard blue, can be customized
-        accent: '#F59E0B', // Gold/Amber
-        text: '#F3F4F6',
-        'text-muted': '#9CA3AF',
+        background: '#040405', // Deep space black
+        surface: {
+          DEFAULT: '#0D0D10',
+          elevated: '#16161E',
+          glass: 'rgba(20, 20, 28, 0.7)',
+        },
+        primary: {
+          DEFAULT: '#6366F1', // Indigo
+          hover: '#4F46E5',
+        },
+        accent: {
+          DEFAULT: '#8B5CF6', // Violet
+          cyan: '#22D3EE',
+        },
+        text: {
+          DEFAULT: '#F8FAFC',
+          muted: '#94A3B8',
+          dim: '#64748B',
+        },
+        border: {
+          DEFAULT: 'rgba(255, 255, 255, 0.08)',
+          hover: 'rgba(255, 255, 255, 0.15)',
+        }
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        heading: ['Outfit', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        heading: ['Outfit', 'Inter', 'sans-serif'],
       },
       animation: {
-        'fade-in': 'fadeIn 0.5s ease-out',
-        'slide-up': 'slideUp 0.5s ease-out',
+        'fade-in': 'fadeIn 0.8s ease-out forwards',
+        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+        'reveal': 'reveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+        'subtle-drift': 'subtleDrift 8s ease-in-out infinite alternate',
       },
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
-        slideUp: {
-          '0%': { transform: 'translateY(20px)', opacity: '0' },
+        fadeInUp: {
+          '0%': { transform: 'translateY(30px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
+        reveal: {
+          '0%': { transform: 'translateY(100%)', opacity: '0' },
+          '100%': { transform: 'translateY(0%)', opacity: '1' },
+        },
+        subtleDrift: {
+          '0%': { transform: 'translate(0, 0) scale(1)' },
+          '100%': { transform: 'translate(2%, 2%) scale(1.05)' },
+        }
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'grid-pattern': "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0V0zm1 1h38v38H1V1z' fill='%23ffffff' fill-opacity='0.03'/%3E%3C/svg%3E\")",
+      }
     },
   },
   plugins: [],

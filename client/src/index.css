@@ -5,21 +5,59 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --primary: 99, 102, 241;
+    --accent: 139, 92, 246;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
-    @apply bg-background text-text font-sans antialiased overflow-x-hidden;
+    @apply bg-background text-text font-sans antialiased overflow-x-hidden selection:bg-primary/30 selection:text-white;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading font-bold;
+    @apply font-heading font-bold tracking-tight;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full hover:bg-white/20 transition-colors;
   }
 }
 
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500;
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-white via-white/90 to-white/40;
+  }
+
+  .text-gradient-primary {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-accent-cyan;
   }
   
   .glass-panel {
-    @apply bg-surface/50 backdrop-blur-md border border-white/10;
+    @apply bg-surface-glass backdrop-blur-xl border border-border;
+  }
+
+  .glass-panel-hover {
+    @apply hover:bg-surface-elevated/40 hover:border-border-hover transition-all duration-300;
+  }
+
+  .section-padding {
+    @apply py-20 md:py-32;
+  }
+
+  .container-tight {
+    @apply max-w-5xl mx-auto px-6;
   }
 }

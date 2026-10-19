@@ -27,7 +27,10 @@ app.use('/api', routes_1.router);
 app.get('/', (req, res) => {
     res.send('One Digital Office API Running');
 });
-// Start Server
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+// Start Server (Only if not running on Vercel)
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
+exports.default = app;

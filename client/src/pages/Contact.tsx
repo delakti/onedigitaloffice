@@ -1,180 +1,134 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Send, CheckCircle } from 'lucide-react';
+import React from 'react';
+import { Mail, MapPin, Clock, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { SEO } from '../components/SEO';
+import { ConsultationForm } from '../components/ConsultationForm';
 
-const Contact: React.FC = () => {
-    const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        company: '',
-        budget: '',
-        message: '',
-        services: [] as string[]
-    });
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setStatus('submitting');
-
-        try {
-            const res = await fetch('http://localhost:3000/api/lead', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            });
-
-            if (res.ok) {
-                setStatus('success');
-            } else {
-                setStatus('error');
-            }
-        } catch (error) {
-            setStatus('error');
-        }
-    };
-
-    const handleServiceToggle = (service: string) => {
-        setFormData(prev => ({
-            ...prev,
-            services: prev.services.includes(service)
-                ? prev.services.filter(s => s !== service)
-                : [...prev.services, service]
-        }));
-    };
-
-    if (status === 'success') {
-        return (
-            <div className="pt-32 pb-24 min-h-[60vh] flex items-center justify-center container mx-auto px-6">
-                <motion.div
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="text-center"
-                >
-                    <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-6" />
-                    <h1 className="text-4xl font-bold mb-4">Message Received</h1>
-                    <p className="text-xl text-text-muted mb-8">Thank you for your interest. We'll be in touch shortly.</p>
-                    <button onClick={() => setStatus('idle')} className="text-accent hover:text-white transition-colors">
-                        Send another message
-                    </button>
-                </motion.div>
-            </div>
-        );
-    }
-
+export const Contact: React.FC = () => {
     return (
-        <div className="pt-32 pb-24">
-            <div className="container mx-auto px-6 max-w-4xl">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-12 text-center"
-                >
-                    <h1 className="text-5xl md:text-6xl font-bold mb-6">Let's build something <br /> <span className="text-gradient">extraordinary.</span></h1>
-                    <p className="text-xl text-text-muted">Tell us about your project.</p>
-                </motion.div>
+        <div className="w-full bg-background min-h-screen text-text">
+            <SEO
+                title="Contact OneDigitalOffice | Book a Technical Consultation"
+                description="Contact OneDigitalOffice for Microsoft 365, SharePoint, Copilot, and AI automation consulting enquiries. Connect directly with our Senior Solutions Architect."
+                keywords="Contact OneDigitalOffice, Microsoft 365 consultant contact, hire SharePoint specialist UK, Copilot discovery call"
+                canonicalPath="/contact"
+            />
 
-                <form onSubmit={handleSubmit} className="space-y-8 bg-surface/30 p-8 md:p-12 rounded-3xl border border-white/5">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold uppercase tracking-wider text-text-muted">Name</label>
-                            <input
-                                required
-                                type="text"
-                                value={formData.name}
-                                onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                className="w-full bg-background border border-white/10 rounded-lg p-4 focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all placeholder:text-gray-700"
-                                placeholder="John Doe"
+            {/* Header */}
+            <section className="relative pt-12 pb-16 md:pt-16 md:pb-24 border-b border-border/40 overflow-hidden text-center">
+                <div className="container mx-auto px-6 max-w-3xl">
+                    <span className="inline-block px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-6">
+                        Get In Touch
+                    </span>
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-extrabold text-white mb-6 leading-tight">
+                        Start Your Microsoft 365 & <br />
+                        <span className="text-gradient">AI Transformation</span>
+                    </h1>
+                    <p className="text-base sm:text-lg text-text-muted leading-relaxed max-w-2xl mx-auto">
+                        Whether you are planning a tenant modernisation, securing data prior to Microsoft Copilot, or automating complex workflows, we are ready to assist.
+                    </p>
+                </div>
+            </section>
+
+            {/* Main Content */}
+            <section className="py-16 md:py-24">
+                <div className="container mx-auto px-6 max-w-6xl">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                        {/* Left Column: Direct Info & Booking Value */}
+                        <div className="lg:col-span-5 space-y-8">
+                            <div className="p-8 rounded-3xl glass-panel border border-border space-y-6">
+                                <h2 className="text-2xl font-heading font-bold text-white">
+                                    Direct Contact Information
+                                </h2>
+                                <p className="text-sm text-text-muted leading-relaxed">
+                                    We value high-signal conversations. When you reach out, you communicate directly with a Principal Enterprise Architect, not an aggressive sales SDR.
+                                </p>
+
+                                <div className="space-y-4 pt-2 text-sm">
+                                    <div className="flex items-start gap-3">
+                                        <div className="p-2.5 rounded-xl bg-surface border border-border text-primary shrink-0">
+                                            <Mail size={18} />
+                                        </div>
+                                        <div>
+                                            <span className="text-xs font-bold uppercase tracking-wider text-text-dim block">
+                                                Consultation Enquiries
+                                            </span>
+                                            <a href="mailto:admin@onedigitaloffice.com" className="text-white hover:text-primary transition-colors font-medium">
+                                                admin@onedigitaloffice.com
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-start gap-3">
+                                        <div className="p-2.5 rounded-xl bg-surface border border-border text-primary shrink-0">
+                                            <MapPin size={18} />
+                                        </div>
+                                        <div>
+                                            <span className="text-xs font-bold uppercase tracking-wider text-text-dim block">
+                                                Location & Service Area
+                                            </span>
+                                            <span className="text-white font-medium">
+                                                London & South East, United Kingdom
+                                            </span>
+                                            <p className="text-xs text-text-dim mt-0.5">
+                                                Delivering on-site and remote consulting nationwide.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-start gap-3">
+                                        <div className="p-2.5 rounded-xl bg-surface border border-border text-primary shrink-0">
+                                            <Clock size={18} />
+                                        </div>
+                                        <div>
+                                            <span className="text-xs font-bold uppercase tracking-wider text-text-dim block">
+                                                Response SLA
+                                            </span>
+                                            <span className="text-white font-medium">
+                                                Within 24 Business Hours
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* What to expect in a discovery session */}
+                            <div className="p-8 rounded-3xl bg-surface-elevated/40 border border-border space-y-4">
+                                <h3 className="text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
+                                    <ShieldCheck size={16} className="text-accent" />
+                                    What to Expect in Discovery
+                                </h3>
+                                <ul className="space-y-2.5 text-xs text-text-muted leading-relaxed">
+                                    <li className="flex items-start gap-2">
+                                        <CheckCircle2 size={14} className="text-primary shrink-0 mt-0.5" />
+                                        <span>30-minute structured technical discovery via Microsoft Teams.</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <CheckCircle2 size={14} className="text-primary shrink-0 mt-0.5" />
+                                        <span>Review of your current Microsoft 365 licensing and security posture.</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <CheckCircle2 size={14} className="text-primary shrink-0 mt-0.5" />
+                                        <span>Targeted recommendations on Copilot readiness, automation, or SharePoint.</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <CheckCircle2 size={14} className="text-primary shrink-0 mt-0.5" />
+                                        <span>Zero-obligation estimation of project timelines and phases.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        {/* Right Column: Full Consultation Form */}
+                        <div className="lg:col-span-7">
+                            <ConsultationForm
+                                headline="Submit Your Project Brief"
+                                subheadline="Complete the form below with your requirements. We will review your brief and send an invitation for a tailored 30-minute technical discovery session."
                             />
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold uppercase tracking-wider text-text-muted">Email</label>
-                            <input
-                                required
-                                type="email"
-                                value={formData.email}
-                                onChange={e => setFormData({ ...formData, email: e.target.value })}
-                                className="w-full bg-background border border-white/10 rounded-lg p-4 focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all placeholder:text-gray-700"
-                                placeholder="john@company.com"
-                            />
-                        </div>
                     </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold uppercase tracking-wider text-text-muted">Company</label>
-                            <input
-                                type="text"
-                                value={formData.company}
-                                onChange={e => setFormData({ ...formData, company: e.target.value })}
-                                className="w-full bg-background border border-white/10 rounded-lg p-4 focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all placeholder:text-gray-700"
-                                placeholder="Company Ltd."
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold uppercase tracking-wider text-text-muted">Budget Range</label>
-                            <select
-                                value={formData.budget}
-                                onChange={e => setFormData({ ...formData, budget: e.target.value })}
-                                className="w-full bg-background border border-white/10 rounded-lg p-4 focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all text-text"
-                            >
-                                <option value="">Select Range</option>
-                                <option value="10k-30k">$10k - $30k</option>
-                                <option value="30k-50k">$30k - $50k</option>
-                                <option value="50k-100k">$50k - $100k</option>
-                                <option value="100k+">$100k+</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div className="space-y-4">
-                        <label className="text-sm font-bold uppercase tracking-wider text-text-muted">Interested Services</label>
-                        <div className="flex flex-wrap gap-3">
-                            {['App Development', 'Web Design', 'Cloud', 'Mobile', 'Video', 'Other'].map(service => (
-                                <button
-                                    key={service}
-                                    type="button"
-                                    onClick={() => handleServiceToggle(service)}
-                                    className={`px-4 py-2 rounded-full text-sm font-medium border transition-all ${formData.services.includes(service)
-                                            ? 'bg-accent border-accent text-black'
-                                            : 'bg-transparent border-white/20 text-text-muted hover:border-white'
-                                        }`}
-                                >
-                                    {service}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-bold uppercase tracking-wider text-text-muted">Message</label>
-                        <textarea
-                            required
-                            value={formData.message}
-                            onChange={e => setFormData({ ...formData, message: e.target.value })}
-                            rows={6}
-                            className="w-full bg-background border border-white/10 rounded-lg p-4 focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all placeholder:text-gray-700 resize-none"
-                            placeholder="Tell us more about your goals..."
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        disabled={status === 'submitting'}
-                        className="w-full py-5 bg-white text-black font-bold rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-                    >
-                        {status === 'submitting' ? 'Sending...' : (
-                            <>Send Inquiry <Send size={18} /></>
-                        )}
-                    </button>
-
-                    {status === 'error' && (
-                        <p className="text-red-500 text-center">Something went wrong. Please try again.</p>
-                    )}
-                </form>
-            </div>
+                </div>
+            </section>
         </div>
     );
 };
-
 export default Contact;
