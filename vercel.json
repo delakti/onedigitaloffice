@@ -19,7 +19,20 @@
             "dest": "/server/src/index.ts"
         },
         {
-            "handle": "filesystem"
+            "src": "/assets/(.*)",
+            "dest": "/client/assets/$1"
+        },
+        {
+            "src": "/robots.txt",
+            "dest": "/client/robots.txt"
+        },
+        {
+            "src": "/sitemap.xml",
+            "dest": "/client/sitemap.xml"
+        },
+        {
+            "src": "/vite.svg",
+            "dest": "/client/vite.svg"
         },
         {
             "src": "/(.*)",
